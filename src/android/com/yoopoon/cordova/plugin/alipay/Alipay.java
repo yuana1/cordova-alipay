@@ -27,22 +27,23 @@ public class Alipay extends CordovaPlugin{
 	public static  String partner;
 	public static String rsa_private;
 	public static String rsa_public;
-	
+
 	private static final int SDK_PAY_FLAG = 1;
 	private static final int SDK_CHECK_FLAG = 2;
 	CallbackContext currentCallbackContext;
-	
+
 	@Override
 	public boolean execute(String action, CordovaArgs args,
 			CallbackContext callbackContext) throws JSONException {
 		// save the current callback context
 		currentCallbackContext = callbackContext;
-		if (action.equals("pay")) {
-			return pay(args);
+		if(action.equals("pay")){
+			return payWithServerSign(args);
 		}
+
 		return true;
 	}
-	
+
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		super.initialize(cordova, webView);
@@ -58,12 +59,12 @@ public class Alipay extends CordovaPlugin{
 			case SDK_PAY_FLAG: {
 				Result resultObj = new Result((String) msg.obj);
 				String resultStatus = resultObj.resultStatus;
-				
+
 				currentCallbackContext.success(resultStatus);
-				
+
 //				// 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
 //				if (TextUtils.equals(resultStatus, "9000")) {
-//					
+//
 //					Toast.makeText(cordova.getActivity(), "支付成功",
 //							Toast.LENGTH_SHORT).show();
 //				} else {
@@ -92,26 +93,20 @@ public class Alipay extends CordovaPlugin{
 		};
 	};
 
-	
 
 	/**
 	 * call alipay sdk pay. 调用SDK支付
-	 * 
+	 *
 	 */
 	private  boolean pay(CordovaArgs args) {
 		try {
-			JSONObject orderInfoArgs =  args.getJSONObject(0);
-			String subject = orderInfoArgs.getString("subject");
-			String body = orderInfoArgs.getString("body");
-			String price = orderInfoArgs.getString("price");
-			String tradeNo = orderInfoArgs.getString("tradeNo");
-			String timeout = orderInfoArgs.getString("timeout");
-			String notifyUrl = orderInfoArgs.getString("notifyUrl");
-			String seller = orderInfoArgs.getString("seller");
-			
-			//"测试的商品", "该测试商品的详细描述", "0.01","30m","www.justep.com"
-			String orderInfo = getOrderInfo(seller,subject,body,price,tradeNo,timeout,notifyUrl);
-			String sign = sign(orderInfo);
+			String orderInfo = args.getString(0);
+			String sign = args.getString(1);
+
+			JSONObject payInfo = args.getJSONObject(2);
+			partner = payInfo.getString("partner");
+			rsa_public = payInfo.getString("rsa_public");
+
 			try {
 				// 仅需对sign 做URL编码
 				sign = URLEncoder.encode(sign, "UTF-8");
@@ -139,21 +134,22 @@ public class Alipay extends CordovaPlugin{
 
 			Thread payThread = new Thread(payRunnable);
 			payThread.start();
-			
-			
+
+
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 			currentCallbackContext.error("订单参数不正确");
 		}
-		
-		
+
+
 		return true;
 	}
+
 
 	/**
 	 * check whether the device has authentication alipay account.
 	 * 查询终端设备是否存在支付宝认证账户
-	 * 
+	 *
 	 */
 	public void check(View v) {
 		Runnable checkRunnable = new Runnable() {
@@ -177,7 +173,7 @@ public class Alipay extends CordovaPlugin{
 
 	/**
 	 * get the sdk version. 获取SDK版本号
-	 * 
+	 *
 	 */
 	public void getSDKVersion() {
 		PayTask payTask = new PayTask(cordova.getActivity());
@@ -187,7 +183,7 @@ public class Alipay extends CordovaPlugin{
 
 	/**
 	 * create the order info. 创建订单信息
-	 * 
+	 *
 	 */
 	public String getOrderInfo(String seller,String subject, String body, String price,String tradeNo,String timeout,String notifyUrl) {
 		// 合作者身份ID
@@ -239,7 +235,7 @@ public class Alipay extends CordovaPlugin{
 
 	/**
 	 * get the out_trade_no for an order. 获取外部订单号
-	 * 
+	 *
 	 */
 	public String getOutTradeNo() {
 		SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss",
@@ -255,7 +251,7 @@ public class Alipay extends CordovaPlugin{
 
 	/**
 	 * sign the order info. 对订单信息进行签名
-	 * 
+	 *
 	 * @param content
 	 *            待签名订单信息
 	 */
@@ -265,7 +261,7 @@ public class Alipay extends CordovaPlugin{
 
 	/**
 	 * get the sign type we use. 获取签名方式
-	 * 
+	 *
 	 */
 	public String getSignType() {
 		return "sign_type=\"RSA\"";
