@@ -52,6 +52,10 @@
 			</activity>
 			<!-- alipay sdk end -->
 		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/*">
+				<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+		</config-file>
 	</platform>
 
 	<platform name="ios">
