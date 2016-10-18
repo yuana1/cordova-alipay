@@ -103,9 +103,9 @@ public class Alipay extends CordovaPlugin{
 			String orderInfo = args.getString(0);
 			String sign = args.getString(1);
 
-			JSONObject payInfo = args.getJSONObject(2);
-			partner = payInfo.getString("partner");
-			rsa_public = payInfo.getString("rsa_public");
+			JSONObject settings = args.getJSONObject(2);
+			partner = settings.getString("partner");
+			rsa_public = settings.getString("rsa_public");
 
 			try {
 				// 仅需对sign 做URL编码
