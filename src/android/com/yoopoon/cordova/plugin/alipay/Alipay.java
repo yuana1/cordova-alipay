@@ -38,7 +38,7 @@ public class Alipay extends CordovaPlugin{
 		// save the current callback context
 		currentCallbackContext = callbackContext;
 		if(action.equals("pay")){
-			return payWithServerSign(args);
+			return pay(args);
 		}
 
 		return true;
