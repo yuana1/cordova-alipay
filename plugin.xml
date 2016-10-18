@@ -8,7 +8,7 @@
 	</engines>
 
 	<js-module src="www/alipay.js" name="alipay">
-		<clobbers target="navigator.alipay" />
+		<clobbers target="Alipay" />
 	</js-module>
 
 	<!-- android -->
@@ -72,9 +72,9 @@
 			</array>
 		</config-file>
 		<config-file target="*-Info.plist" parent="CFBundleDevelopmentRegion">
-		    
+
 				<string>Chian</string>
-			
+
 		</config-file>
 
 		<!-- ios9不允许http访问，需要使用https访问，添加以下属性使http正常使用 -->
@@ -83,9 +83,9 @@
 		    	<key>NSAllowsArbitraryLoads</key>
 				<true />
 			</dict>
-			
+
 		</config-file>
-		
+
 		<!-- ios9 适配 query Schemes -->
 		<config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
 			<array>
@@ -93,8 +93,8 @@
 				<string>alipay</string>
 			</array>
 		</config-file>
-	    
-	    
+
+
 		<!-- build setting header search path $(SRCROOT)/X5 -->
 		<header-file src="src/ios/CDVAlipay.h" />
 		<source-file src="src/ios/CDVAlipay.m" />
@@ -197,7 +197,7 @@
 		<source-file src="src/ios/Util/RSADataSigner.m" />
 		<header-file src="src/ios/Util/RSADataVerifier.h" />
 		<source-file src="src/ios/Util/RSADataVerifier.m" />
-		
+
 		<config-file target="config.xml" parent="/*">
 			<preference name="partner" value="2088311414553123" />
 			<preference name="rsa_private"
@@ -209,16 +209,16 @@
 				<param name="onload" value="true" />
 			</feature>
 		</config-file>
-		
+
 		<source-file src="src/ios/libcrypto.a" framework="true" />
 		<source-file src="src/ios/libssl.a" framework="true" />
 		<!-- 手动copy framework bundle 文件 -->
-		
+
 		<!-- afnetworking 依赖security.framework -->
         <framework src="Security.framework"/>
         <framework src="SystemConfiguration.framework"/>
         <framework src="AssetsLibrary.framework"/>
-        
+
         <framework src="src/ios/AlipaySDK.framework" custom="true" />
 	</platform>
 </plugin>
