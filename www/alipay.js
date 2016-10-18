@@ -11,7 +11,7 @@ module.exports = {
 };
 
 */
-var Alipay = function(){}
+var Alipay = function() {}
 
 Alipay.prototype.settings = {
     partner: '',
@@ -21,7 +21,7 @@ Alipay.prototype.settings = {
     debug: false
 }
 
-Alipay.prototype.getOrderInfo = function (opts) {
+Alipay.prototype.getOrderInfo = function(opts) {
     var _this = this;
     var opts = this.merge({
         out_trade_no: new Date().getTime(),
@@ -29,61 +29,61 @@ Alipay.prototype.getOrderInfo = function (opts) {
         body: '商品描述',
         total_fee: '0.01',
         notify_url: 'http://m.alipay.com',
-        return_url: 'http://m.alipay.com'
+        return_url: ''
     }, opts);
 
     var params = 'partner="' + this.settings.partner + '"&seller_id="' + this.settings.seller_id + '"&service="mobile.securitypay.pay"&_input_charset="UTF-8"&payment_type="1"&it_b_pay="1m"';
 
-    for(var k in opts){
+    for (var k in opts) {
         params += '&' + k + '="' + encodeURI(opts[k]) + '"';
     };
 
-    if(opts.debug){
+    if (opts.debug) {
         console.log(params);
     }
     return params;
 
 }
 
-Alipay.prototype.pay = function(params, sign, payInfo, succ, fail){
+Alipay.prototype.pay = function(params, sign, succ, fail) {
     var _this = this;
 
-    if(this.settings.locked){
+    if (this.settings.locked) {
         return false;
     }
 
     this.settings.locked = true;
 
-    var succ_func = function(e){
+    var succ_func = function(e) {
         _this.settings.locked = false;
-        if(typeof succ !== 'undefined'){
+        if (typeof succ !== 'undefined') {
             succ(e);
-        }else{
+        } else {
             console.log(e);
         }
     }
 
-    var fail_func = function(e){
+    var fail_func = function(e) {
         _this.settings.locked = false;
-        if(typeof fail !== 'undefined'){
+        if (typeof fail !== 'undefined') {
             fail(e);
-        }else{
+        } else {
             console.log(e);
         }
     }
 
-    cordova.exec(succ_func, fail_func, 'Alipay', 'pay', [params, sign, payInfo]);
+    cordova.exec(succ_func, fail_func, 'Alipay', 'pay', [params, sign, _this.settings]);
 
     return true;
 };
 
-Alipay.prototype.merge = function(defaults, target){
-    if(typeof target === 'undefined'){
+Alipay.prototype.merge = function(defaults, target) {
+    if (typeof target === 'undefined') {
         return defaults;
     }
 
-    for(var k in defaults){
-        if(!target.hasOwnProperty(k)){
+    for (var k in defaults) {
+        if (!target.hasOwnProperty(k)) {
             target[k] = defaults[k];
         }
     }
