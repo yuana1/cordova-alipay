@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
 
@@ -27,7 +28,7 @@ public class Alipay extends CordovaPlugin{
 	public static  String partner;
 	public static String rsa_private;
 	public static String rsa_public;
-
+	private static final String TAG = "cordova.alipay";
 	private static final int SDK_PAY_FLAG = 1;
 	private static final int SDK_CHECK_FLAG = 2;
 	CallbackContext currentCallbackContext;
@@ -116,6 +117,7 @@ public class Alipay extends CordovaPlugin{
 			final String payInfo = orderInfo + "&sign=\"" + sign + "\"&"
 					+ getSignType();
 
+			Log.v(TAG, payInfo);
 			Runnable payRunnable = new Runnable() {
 
 				@Override
