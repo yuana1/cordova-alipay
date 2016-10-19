@@ -27,12 +27,12 @@ Alipay.prototype.getOrderInfo = function(opts) {
 
     }, opts);
 
-    var params = 'partner="' + this.settings.partner + '"&seller_id="' + this.settings.seller_id + '"&service="mobile.securitypay.pay"&_input_charset="UTF-8"&payment_type="1"';
+    var params = 'partner="' + this.settings.partner + '"&seller_id="' + this.settings.seller_id + '"';
 
     for (var k in opts) {
         params += '&' + k + '="' + (opts[k]) + '"';
     };
-
+    params += '&service="mobile.securitypay.pay"&payment_type="1"&_input_charset="utf-8"';
     if (opts.debug) {
         console.log(params);
     }
