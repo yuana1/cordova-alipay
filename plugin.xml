@@ -71,7 +71,7 @@
 					<string>alipay</string>
 					<key>CFBundleURLSchemes</key>
 					<array>
-						<string>2088311414553123</string>
+						<string>alipaycordova</string>
 					</array>
 				</dict>
 			</array>
