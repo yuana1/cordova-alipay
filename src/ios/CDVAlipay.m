@@ -75,7 +75,7 @@
     self.rsa_public = alipaySetting[@"rsa_public"];
     
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = [self partner];
+    NSString *appScheme = @"alipaycordova";
     
     //encode signs
     NSString *signedString = [ self urlEncodedString:sign];
